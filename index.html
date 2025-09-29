@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator with Theme Toggle</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #1e3c72, #2a5298);
+      --calc-bg: rgba(255, 255, 255, 0.1);
+      --btn-bg: rgba(255, 255, 255, 0.15);
+      --btn-hover: rgba(255, 255, 255, 0.3);
+      --text-color: #fff;
+    }
+
+    body.light {
+      --bg-gradient: linear-gradient(135deg, #fdfbfb, #ebedee);
+      --calc-bg: rgba(0, 0, 0, 0.05);
+      --btn-bg: rgba(0, 0, 0, 0.1);
+      --btn-hover: rgba(0, 0, 0, 0.2);
+      --text-color: #000;
+    }
+
+    /* General Page Style */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: var(--bg-gradient);
+      font-family: 'Poppins', sans-serif;
+      transition: background 0.5s;
+    }
+
+    /* Calculator Container */
+    .calculator {
+      background: var(--calc-bg);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      padding: 20px;
+      width: 320px;
+      transition: background 0.5s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Theme Toggle Button */
+    .theme-toggle {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .theme-toggle button {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 15px;
+      cursor: pointer;
+      font-weight: bold;
+      background: var(--btn-bg);
+      color: var(--text-color);
+      transition: 0.3s;
+    }
+    .theme-toggle button:hover {
+      background: var(--btn-hover);
+    }
+
+    /* Display */
+    .display {
+      width: 100%;
+      height: 70px;
+      border: none;
+      border-radius: 15px;
+      background: var(--btn-bg);
+      color: var(--text-color);
+      font-size: 2rem;
+      text-align: right;
+      padding: 10px 15px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      overflow-x: auto;   /* Prevents overflow when numbers are long */
+      white-space: nowrap;
+      box-shadow: inset 0 5px 10px rgba(0,0,0,0.2);
+      transition: background 0.5s, color 0.5s;
+    }
+
+    /* Buttons Grid */
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    /* Buttons */
+    button {
+      height: 60px;
+      border: none;
+      border-radius: 15px;
+      background: var(--btn-bg);
+      color: var(--text-color);
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease, background 0.5s, color 0.5s;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+      background: var(--btn-hover);
+      transform: scale(1.05);
+    }
+
+    /* Special Buttons */
+    .equal {
+      grid-column: span 2;
+      background: #ff9500;
+      color: #fff;
+    }
+    .equal:hover {
+      background: #e08600;
+    }
+
+    .clear {
+      background: #ff3b30;
+      color: #fff;
+    }
+    .clear:hover {
+      background: #d32f2f;
+    }
+
+    .operator {
+      background: #34c759;
+      color: #fff;
+    }
+    .operator:hover {
+      background: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="theme-toggle">
+      <button id="themeBtn" onclick="toggleTheme()">🌙 Dark</button>
+    </div>
+    <input type="text" class="display" id="display" disabled>
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button onclick="appendValue('(')">(</button>
+      <button onclick="appendValue(')')">)</button>
+      <button class="operator" onclick="appendValue('/')">÷</button>
+
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button class="operator" onclick="appendValue('*')">×</button>
+
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button class="operator" onclick="appendValue('-')">−</button>
+
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button class="operator" onclick="appendValue('+')">+</button>
+
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+      <button class="equal" onclick="calculateResult()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById("display");
+    let themeBtn = document.getElementById("themeBtn");
+
+    function appendValue(value) {
+      display.value += value;
+    }
+
+    function clearDisplay() {
+      display.value = "";
+    }
+
+    function calculateResult() {
+      try {
+        display.value = eval(display.value);
+      } catch (error) {
+        display.value = "Error";
+      }
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light");
+
+      if (document.body.classList.contains("light")) {
+        themeBtn.textContent = "☀️ Light";
+      } else {
+        themeBtn.textContent = "🌙 Dark";
+      }
+    }
+  </script>
+</body>
+</html>
